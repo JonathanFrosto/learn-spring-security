@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.Base64;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,25 +24,18 @@ class BookControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Value("${spring.security.user.name}")
-    String user;
-
-    @Value("${spring.security.user.password}")
-    String password;
-
-    String basicEncoded;
-
-    @BeforeEach
-    void setup() {
-        basicEncoded = Base64.getEncoder().encodeToString(user.concat(":").concat(password).getBytes());
-    }
-
     @Test
     void getBooks() throws Exception {
         mockMvc.perform(get("/book")
-                        .header("Authorization", "Basic " + basicEncoded))
+                        .with(httpBasic("jonathan", "senhaTest1")))
                 .andExpect(status().isOk());
     }
 
-    
+    @Test
+    void getBooksSecondUser() throws Exception {
+        mockMvc.perform(get("/book")
+                        .with(httpBasic("convidado", "senhaTest2")))
+                .andExpect(status().isOk());
+    }
+
 }
