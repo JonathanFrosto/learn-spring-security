@@ -1,0 +1,17 @@
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+        security: DEBUG
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: jonathan
+#    password: 123
+    driverClassName: org.h2.Driver
+  jpa:
+    database-plataform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
