@@ -2,7 +2,6 @@ package com.learn.security.controllers;
 
 import com.learn.security.service.UserService;
 import com.learn.security.service.dto.UserDTO;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +29,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/admin")
-    @Secured("ADMIN")
+    @PreAuthorize("hasAuthority('user.turn-admin')")
     public void turnAdmin(@PathVariable Long id) {
         userService.turnAdmin(id);
     }

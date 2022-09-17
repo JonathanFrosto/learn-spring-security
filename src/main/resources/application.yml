@@ -1,6 +1,12 @@
 logging:
   level:
     org:
+#      hibernate:
+#        SQL: DEBUG
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: TRACE
       springframework:
         web: DEBUG
         security: DEBUG
@@ -12,6 +18,10 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     database-plataform: org.hibernate.dialect.H2Dialect
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
   h2:
     console:
       enabled: true

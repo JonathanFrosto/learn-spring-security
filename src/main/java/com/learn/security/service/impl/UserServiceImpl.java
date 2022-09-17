@@ -1,16 +1,17 @@
 package com.learn.security.service.impl;
 
 import com.learn.security.entity.Client;
-import com.learn.security.entity.ClientRole;
+import com.learn.security.entity.Role;
 import com.learn.security.enums.RoleType;
 import com.learn.security.repository.ClientRepository;
-import com.learn.security.repository.ClientRoleRepository;
+import com.learn.security.repository.RoleRepository;
 import com.learn.security.service.UserService;
 import com.learn.security.service.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,13 +19,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final ClientRepository clientRepository;
-    private final ClientRoleRepository clientRoleRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public List<UserDTO> findAll() {
         return clientRepository.findAll()
                 .stream()
-                .map(entity -> entityToDTO(entity))
+                .map(UserServiceImpl::entityToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -60,9 +61,9 @@ public class UserServiceImpl implements UserService {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("user not foudn"));
 
-        List<ClientRole> roles = client.getRoles();
+        Set<Role> roles = client.getRoles();
 
-        ClientRole role = clientRoleRepository.findByRole(RoleType.ROLE_ADMIN);
+        Role role = roleRepository.findByRole(RoleType.ROLE_ADMIN);
         client.getRoles().add(role);
 
         clientRepository.save(client);
