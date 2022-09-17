@@ -38,4 +38,10 @@ public class UserController {
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
         return userService.save(userDTO);
     }
+
+    @PutMapping("/change-password")
+    @PreAuthorize("@resourceOwnerValidator.validate(#userDTO.getEmail(), authentication)")
+    public void changePassword(@RequestBody UserDTO userDTO) {
+        userService.changePassword(userDTO);
+    }
 }

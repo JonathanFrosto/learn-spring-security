@@ -14,4 +14,6 @@ public interface UserService {
     UserDTO save(UserDTO userDTO);
 
     void turnAdmin(Long id);
+
+    void changePassword(UserDTO userDTO);
 }

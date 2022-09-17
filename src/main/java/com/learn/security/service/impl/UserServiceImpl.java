@@ -69,6 +69,11 @@ public class UserServiceImpl implements UserService {
         clientRepository.save(client);
     }
 
+    @Override
+    public void changePassword(UserDTO userDTO) {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
     private static UserDTO entityToDTO(Client entity) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(entity.getId());
