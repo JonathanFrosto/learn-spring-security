@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.Set;
 
+import static com.learn.security.constants.Authorities.ADMIN_TURN_ADMIN;
+import static com.learn.security.constants.Authorities.USER_LIST;
+
 @Component
 @RequiredArgsConstructor
 public class LoadClients implements CommandLineRunner {
@@ -26,8 +29,8 @@ public class LoadClients implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Authority auth1 = Authority.builder().name("user.list").build();
-        Authority auth2 = Authority.builder().name("user.turn-admin").build();
+        Authority auth1 = Authority.builder().name(USER_LIST).build();
+        Authority auth2 = Authority.builder().name(ADMIN_TURN_ADMIN).build();
         authorityRepository.saveAll(Arrays.asList(auth1, auth2));
 
         Role admin = Role.builder()

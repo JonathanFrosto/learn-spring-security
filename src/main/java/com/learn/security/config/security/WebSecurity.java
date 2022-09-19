@@ -1,8 +1,10 @@
 package com.learn.security.config.security;
 
-import com.learn.security.config.security.filters.HeaderFilter;
+import com.learn.security.config.security.filters.JwtAuthenticationFilter;
+import com.learn.security.config.security.filters.JwtLoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,22 +19,26 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurity {
 
-    private HeaderFilter getHeaderFilter(AuthenticationManager authenticationManager) {
-        return new HeaderFilter(new AntPathRequestMatcher("/api/**"), authenticationManager);
-    }
-
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http
-                .addFilterBefore(getHeaderFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(getLoginFiler(authenticationManager), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/error").permitAll()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable();
 
         return http.build();
+    }
+
+    private static JwtLoginFilter getLoginFiler(AuthenticationManager authenticationManager) {
+        return new JwtLoginFilter(new AntPathRequestMatcher("/login", HttpMethod.POST.name()), authenticationManager);
     }
 
     @Bean

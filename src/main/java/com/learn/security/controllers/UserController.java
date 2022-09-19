@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.learn.security.constants.Authorities.ADMIN_TURN_ADMIN;
+import static com.learn.security.constants.Authorities.USER_LIST;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -18,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('" + USER_LIST + "')")
     public List<UserDTO> findAll() {
         return userService.findAll();
     }
@@ -29,7 +32,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/admin")
-    @PreAuthorize("hasAuthority('user.turn-admin')")
+    @PreAuthorize("hasAuthority('" + ADMIN_TURN_ADMIN + "')")
     public void turnAdmin(@PathVariable Long id) {
         userService.turnAdmin(id);
     }
